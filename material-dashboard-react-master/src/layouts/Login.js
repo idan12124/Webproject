@@ -33,18 +33,36 @@ const styles = {
   const useStyles = makeStyles(styles);
 
 
-function LogInApi(){
-    //fetch("").then()
-}
-
 function Login (){
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const classes = useStyles()
  
+
+    function validateForm() {
+      return username.length > 0 && password.length > 0;
+    }
+
+    function handleLogin(event){
+
+        fetch("/Login", { 
+              
+        method: "POST", 
+        
+      body: JSON.stringify({ 
+          username: username,
+          password: password, 
+      }), 
+        
+      headers: { 
+          "Content-type": "application/json; charset=UTF-8"
+      } 
+      }) 
+    }
     return (
-    <div  style={{display: 'flex',  justifyContent:'center', alignItems:'center' ,  height: '80vh'}}>
+    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center' ,  height: '80vh'}}>
+      <form onSubmit={handleLogin}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
@@ -85,11 +103,12 @@ function Login (){
               
             </CardBody>
             <CardFooter>
-              <Button color="primary">Login</Button>
+            <Button type="submit" disabled={!validateForm()} vcolor="primary">Login</Button>
             </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
+      </form>
     </div>
             
     )
