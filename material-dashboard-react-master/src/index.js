@@ -48,6 +48,8 @@ ReactDOM.render(
       <Route path="/Login" component={Login} />
       <Route path="/Register" component={Register} />
       <PrivateRoute path="/admin" component={Admin} />
+      <Route exact path="/" component={Login} />
+
     </Switch>
   </Router>
   </Provider>,
