@@ -9,7 +9,9 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import setAuth from "actions/jwtActions"
+import {useDispatch} from "react-redux";
+import decode from "jwt-decode";
 
 const styles = {
     cardCategoryWhite: {
@@ -37,16 +39,17 @@ function Login (){
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
     const classes = useStyles()
- 
+    const dispatch = useDispatch()
 
     function validateForm() {
       return username.length > 0 && password.length > 0;
     }
 
     function handleLogin(event){
-
-        fetch("/Login", { 
+      event.preventDefault()
+        fetch("/api/users/auth", { 
               
         method: "POST", 
         
@@ -58,6 +61,15 @@ function Login (){
       headers: { 
           "Content-type": "application/json; charset=UTF-8"
       } 
+      }).then(response => response.json())
+      .then(data => {
+        console.log(data)
+        setError(data.error)
+        if(data.login){
+          console.log(data.token)
+          localStorage.setItem("jwtToken", data.token)
+          dispatch(setAuth(decode(data.token)))
+        }
       })
     }
     return (
@@ -104,6 +116,9 @@ function Login (){
             </CardBody>
             <CardFooter>
             <Button type="submit" disabled={!validateForm()} vcolor="primary">Login</Button>
+            </CardFooter>
+            <CardFooter>
+              <p>{error}</p>
             </CardFooter>
           </Card>
         </GridItem>

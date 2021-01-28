@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const User = require('../model/User')
 const validate = require('../registerValidation')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
+const { cache } = require('@hapi/joi');
 
 router.post('/register', async (req, res) => {
     const userV = {
@@ -49,6 +51,29 @@ router.post('/register', async (req, res) => {
     }
 
 });
+
+router.post("/auth", async(req, res) => {
+    
+    
+    try{
+        //Check if user exsist
+        const user = await User.findOne({username: req.body.username})
+        if(!user) {return res.status(400).json({error : "username or password is incorrect!"})}
+
+        //Check if password is correct
+        const isValidPass = await bcrypt.compare(req.body.password, user.password)
+        if(!isValidPass)return res.status(400).json({error : "username or password is incorrect!"})
+
+        const token = jwt.sign({_id : user._id}, process.env.JWT_SECERT)
+        res.header("auth-token", token).json({"login" : true, "token" : token})
+    }catch (err){
+        res.status(400).send(err)
+    }
+
+    
+
+
+})
 
 module.exports = router;
 

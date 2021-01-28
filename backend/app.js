@@ -5,9 +5,11 @@ const authRoute = require('./routes/auth.js')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
+const updateRoute = require('./routes/updateProfile')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/api/update", updateRoute)
 app.use("/api/users", authRoute)
 app.listen('5000')
 
