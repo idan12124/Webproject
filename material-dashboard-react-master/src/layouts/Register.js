@@ -81,7 +81,7 @@ export default function Register() {
 
     }
   return (
-    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center' ,  height: '80vh'}}>
+    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center' ,  height: '100vh'}}>
     <form onSubmit={sendRegister}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>

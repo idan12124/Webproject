@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -37,9 +37,44 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function UserProfile() {
+
+  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [city, setCity] = useState("")
+  const [country, setCountry] = useState("")
+  const [postalCode, setPostlCode] = useState("")
+  const [aboutMe, setAboutMe] = useState("")
+  const [error, setError] = useState("")
+
   const classes = useStyles();
+
+  function sendUpdate(event){
+    event.preventDefault()
+    fetch("/api/Update", {
+        method: "POST",
+        body: JSON.stringify({ 
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            city: city,
+            country: country,
+            postalCode: postalCode,
+            aboutMe: aboutMe
+        }),
+        headers: { 
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    }).then(response => response.text())
+    .then(data => setError(data))
+
+}
+
   return (
     <div>
+      <form onSubmit={sendUpdate}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
           <Card>
@@ -63,10 +98,14 @@ export default function UserProfile() {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={3}>
                   <CustomInput
-                    labelText="Username"
+                    labelText="Password"
                     id="username"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: false
+                    }}
+                    inputProps={{
+                        value:password,
+                        onChange:e => setPassword(e.target.value)
                     }}
                   />
                 </GridItem>
@@ -77,6 +116,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:email,
+                      onChange:e => setEmail(e.target.value)
+                  }}
                   />
                 </GridItem>
               </GridContainer>
@@ -88,6 +131,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:firstName,
+                      onChange:e => setFirstName(e.target.value)
+                  }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -97,6 +144,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:lastName,
+                      onChange:e => setLastName(e.target.value)
+                  }}
                   />
                 </GridItem>
               </GridContainer>
@@ -108,6 +159,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:city,
+                      onChange:e => setCity(e.target.value)
+                  }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
@@ -117,6 +172,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:country,
+                      onChange:e => setCountry(e.target.value)
+                  }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
@@ -126,6 +185,10 @@ export default function UserProfile() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      value:postalCode,
+                      onChange:e => setPostlCode(e.target.value)
+                  }}
                   />
                 </GridItem>
               </GridContainer>
@@ -133,12 +196,13 @@ export default function UserProfile() {
                 <GridItem xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
                   <CustomInput
-                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
                     id="about-me"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
+                      value:aboutMe,
+                      onChange:e => setAboutMe(e.target.value),
                       multiline: true,
                       rows: 5
                     }}
@@ -147,7 +211,7 @@ export default function UserProfile() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button type="submit" color="primary">Update Profile</Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -173,6 +237,7 @@ export default function UserProfile() {
           </Card>
         </GridItem>
       </GridContainer>
+      </form>
     </div>
   );
 }

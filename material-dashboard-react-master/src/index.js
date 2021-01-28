@@ -21,17 +21,25 @@ import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import Login from "layouts/Login"
 import Register from "layouts/Register"
-import {createStore} from "redux"
 import {Provider} from "react-redux"
-import setAuth from "./reducers/jwtAuth"
+import PrivateRoute from "./protectedRoute"
+import {useSelector} from 'react-redux'
+import store from "store"
+import decode from "jwt-decode";
+import setAuth from "actions/jwtActions"
+import {useDispatch} from "react-redux";
+
 // core components
-//import Admin from "layouts/Admin.js";
+import Admin from "layouts/Admin.js";
 //import RTL from "layouts/RTL.js";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
 const hist = createBrowserHistory();
-const store = createStore(setAuth, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
+if(localStorage.jwtToken){
+  store.dispatch(setAuth(decode(localStorage.jwtToken)))
+}
 
 ReactDOM.render(
   <Provider store={store}>
@@ -39,6 +47,7 @@ ReactDOM.render(
     <Switch>
       <Route path="/Login" component={Login} />
       <Route path="/Register" component={Register} />
+      <PrivateRoute path="/admin" component={Admin} />
     </Switch>
   </Router>
   </Provider>,

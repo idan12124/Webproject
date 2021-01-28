@@ -42,7 +42,7 @@
     "node": "npm start --prefix ../backend",
     "dev": "concurrently \"npm run start\" \"nodemon run app.js\""
   },
-  "proxy": "http://localhost:5000/",
+  "proxy": "http://localhost:5001/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"

@@ -11,21 +11,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/update", updateRoute)
 app.use("/api/users", authRoute)
-app.listen('5000')
+app.listen('5001')
 
 dotenv.config()
 
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true} ,
     () => console.log("DB Connected!"))
-
-// app.get('/Login', async (req, res) => {
-//     try{
-//         const salt = await bcrypt.genSalt()
-//         const passwordHash = await bcrypt.hash(req.body.password, salt)
-    
-//         res.json({'test':123})
-
-//     }catch{
-//         res.status(501).send()
-//     }
-// })

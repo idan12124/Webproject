@@ -35,7 +35,7 @@ const styles = {
   const useStyles = makeStyles(styles);
 
 
-function Login (){
+function Login (props){
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -69,6 +69,7 @@ function Login (){
           console.log(data.token)
           localStorage.setItem("jwtToken", data.token)
           dispatch(setAuth(decode(data.token)))
+          props.history.push('/admin')
         }
       })
     }
