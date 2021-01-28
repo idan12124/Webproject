@@ -16,7 +16,7 @@ let user = new Schema(
     email: {
       type: String
     },
-    firsname: {
+    firstname: {
         type: String
     },
     lastname: {

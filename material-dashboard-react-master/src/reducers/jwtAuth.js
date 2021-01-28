@@ -8,7 +8,8 @@ export default function login (token = initToken, action = {}){
         case 'setToken':
             return ({
                 isAuth : true,
-                _id : action.token._id
+                _id : action.token._id,
+                jwtToken: action.jwt
             })
     }
 }

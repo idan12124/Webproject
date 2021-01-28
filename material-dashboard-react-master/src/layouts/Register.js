@@ -33,7 +33,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Register() {
+export default function Register(props) {
 
     const [company, setCompany] = useState("")
     const [userName, setUserName] = useState("")
@@ -76,8 +76,13 @@ export default function Register() {
             headers: { 
                 "Content-type": "application/json; charset=UTF-8"
             }
-        }).then(response => response.text())
-        .then(data => setError(data))
+        }).then(response => response.json())
+        .then(data => {
+          if(data.error) {setError(data.error)}
+          else{
+            props.history.push('/Login')
+          }
+        })
 
     }
   return (
@@ -125,6 +130,7 @@ export default function Register() {
                       fullWidth: false
                     }}
                     inputProps={{
+                        type:"password",
                         value:password,
                         onChange:e => setPassword(e.target.value)
                     }}

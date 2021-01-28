@@ -12,8 +12,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import store from "store"
 import avatar from "assets/img/faces/marc.jpg";
+import { resetWarningCache } from "prop-types";
 
 const styles = {
   cardCategoryWhite: {
@@ -50,9 +51,21 @@ export default function UserProfile() {
 
   const classes = useStyles();
 
-  function sendUpdate(event){
+  function reset(){
+    setPassword("")
+    setEmail("")
+    setFirstName("")
+    setLastName("")
+    setCity("")
+    setCountry("")
+    setPostlCode("")
+    setAboutMe("")
+    setError("")
+  }
+
+   function sendUpdate(event){
     event.preventDefault()
-    fetch("/api/Update", {
+    fetch("/api/update", {
         method: "POST",
         body: JSON.stringify({ 
             password: password,
@@ -65,10 +78,17 @@ export default function UserProfile() {
             aboutMe: aboutMe
         }),
         headers: { 
-            "Content-type": "application/json; charset=UTF-8"
+            "Content-type": "application/json; charset=UTF-8",
+            "token": `${store.getState().jwtToken}`
         }
-    }).then(response => response.text())
-    .then(data => setError(data))
+    }).then(response => response.json())
+    .then((data) =>  {
+      if(data.error) {setError(data.error)}
+      else{
+        reset()
+        alert(data.succcess)
+      }
+    })
 
 }
 
@@ -104,6 +124,7 @@ export default function UserProfile() {
                       fullWidth: false
                     }}
                     inputProps={{
+                        type:"password",
                         value:password,
                         onChange:e => setPassword(e.target.value)
                     }}
@@ -212,6 +233,9 @@ export default function UserProfile() {
             </CardBody>
             <CardFooter>
               <Button type="submit" color="primary">Update Profile</Button>
+            </CardFooter>
+            <CardFooter>
+              <p>{error}</p>
             </CardFooter>
           </Card>
         </GridItem>

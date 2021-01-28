@@ -38,7 +38,7 @@ import "assets/css/material-dashboard-react.css?v=1.8.0";
 const hist = createBrowserHistory();
 
 if(localStorage.jwtToken){
-  store.dispatch(setAuth(decode(localStorage.jwtToken)))
+  store.dispatch(setAuth(decode(localStorage.jwtToken), localStorage.jwtToken))
 }
 
 ReactDOM.render(

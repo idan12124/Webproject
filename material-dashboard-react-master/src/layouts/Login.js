@@ -68,7 +68,7 @@ function Login (props){
         if(data.login){
           console.log(data.token)
           localStorage.setItem("jwtToken", data.token)
-          dispatch(setAuth(decode(data.token)))
+          dispatch(setAuth(decode(data.token), data.token))
           props.history.push('/admin')
         }
       })

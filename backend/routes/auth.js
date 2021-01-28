@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
             password: req.body.password,
             company: req.body.company,
             email: req.body.email,
-            firsname: req.body.firstName,
+            firstname: req.body.firstName,
             lastname: req.body.lastName,
             city: req.body.city,
             country: req.body.country,
@@ -28,12 +28,12 @@ router.post('/register', async (req, res) => {
     )
     //Validate user data.
     const {error} = validate(userV)
-    if(error) { return res.status(400).send(error.details[0].message)};
+    if(error) { return res.status(400).json({"error": error.details[0].message})};
     
     //Check uniq
     console.log(user.username)
     const userexist = await User.findOne({username: user.username})
-    if(userexist) {return res.status(400).send("The user alredy exsits")}
+    if(userexist) {return res.status(400).json({"error" : "The user alredy exsits"})}
 
     //add hash password
     const salt = await bcrypt.genSalt()
